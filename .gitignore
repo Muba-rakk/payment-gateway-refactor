@@ -13,3 +13,7 @@ bin/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Variabel Lingkungan
+.env
+.env.local
