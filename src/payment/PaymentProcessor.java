@@ -5,15 +5,22 @@ import payment.interfaces.PaymentNotifier;
 import payment.interfaces.PaymentRepository;
 
 public class PaymentProcessor {
-    // TODO: Deklarasikan variabel private untuk PaymentRepository dan PaymentNotifier di sini
+    private PaymentRepository repository;
+    private PaymentNotifier notifier;
 
-    // TODO: Buat constructor untuk melakukan injeksi PaymentRepository dan PaymentNotifier (DIP)
+    public PaymentProcessor(PaymentRepository repository, PaymentNotifier notifier) {
+        this.repository = repository;
+        this.notifier = notifier;
+    }
 
     public void processPayment(PaymentMethod method, double amount, String customerContact) {
-        // TODO: 1. Proses pembayaran spesifik (Polimorfisme)
+        // Proses pembayaran sesuai metode yang dipilih
+        method.pay(amount);
         
-        // TODO: 2. Simpan transaksi ke database melalui repository
+        // Simpan transaksi ke database lewat repository
+        repository.saveTransaction(amount, method.getClass().getSimpleName());
         
-        // TODO: 3. Kirim notifikasi melalui notifier
+        // Kirim notifikasi lewat notifier
+        notifier.sendNotification(amount, customerContact);
     }
 }
