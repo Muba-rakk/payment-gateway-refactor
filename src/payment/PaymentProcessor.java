@@ -14,13 +14,13 @@ public class PaymentProcessor {
     }
 
     public void processPayment(PaymentMethod method, double amount, String customerContact) {
-        // 1. Proses pembayaran spesifik (Polimorfisme)
+        // Proses pembayaran sesuai metode yang dipilih
         method.pay(amount);
         
-        // 2. Simpan transaksi ke database melalui repository
+        // Simpan transaksi ke database lewat repository
         repository.saveTransaction(amount, method.getClass().getSimpleName());
         
-        // 3. Kirim notifikasi melalui notifier
+        // Kirim notifikasi lewat notifier
         notifier.sendNotification(amount, customerContact);
     }
 }
