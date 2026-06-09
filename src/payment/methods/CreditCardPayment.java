@@ -3,13 +3,18 @@ package payment.methods;
 import payment.interfaces.PaymentMethod;
 
 public class CreditCardPayment implements PaymentMethod {
-    // TODO: Tambahkan atribut private untuk cardNumber, cvv, expiryDate
+    private String cardNumber;
+    private String cvv;
+    private String expiryDate;
 
-    // TODO: Buat constructor
+    public CreditCardPayment(String cardNumber, String cvv, String expiryDate) {
+        this.cardNumber = cardNumber;
+        this.cvv = cvv;
+        this.expiryDate = expiryDate;
+    }
 
     @Override
     public void pay(double amount) {
-        // TODO: Implementasikan logika pembayaran spesifik (misal: print "Memproses CC...")
-        System.out.println("[TODO] CC Payment belum diimplementasikan.");
+        System.out.println(String.format("Memproses CC... dengan kartu %s (CVV: %s, Exp: %s) sebesar Rp%.2f", cardNumber, cvv, expiryDate, amount));
     }
 }

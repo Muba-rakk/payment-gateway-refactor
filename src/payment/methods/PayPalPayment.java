@@ -3,13 +3,14 @@ package payment.methods;
 import payment.interfaces.PaymentMethod;
 
 public class PayPalPayment implements PaymentMethod {
-    // TODO: Tambahkan atribut private untuk email
+    private String email;
 
-    // TODO: Buat constructor
+    public PayPalPayment(String email) {
+        this.email = email;
+    }
 
     @Override
     public void pay(double amount) {
-        // TODO: Implementasikan logika PayPal
-        System.out.println("[TODO] PayPal Payment belum diimplementasikan.");
+        System.out.println("Memproses PayPal... dengan email " + email + " sebesar Rp" + amount);
     }
 }

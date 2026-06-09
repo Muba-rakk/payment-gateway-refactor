@@ -1,5 +1,5 @@
 package payment.interfaces;
 
 public interface PaymentMethod {
-    // TODO: Deklarasikan metode abstrak pay(double amount)
+    void pay(double amount);
 }
