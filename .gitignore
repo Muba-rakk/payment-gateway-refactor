@@ -17,3 +17,4 @@ Thumbs.db
 # Variabel Lingkungan
 .env
 .env.local
+.vscode/launch.json
