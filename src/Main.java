@@ -3,6 +3,7 @@ import payment.interfaces.PaymentMethod;
 import payment.interfaces.PaymentNotifier;
 import payment.interfaces.PaymentRepository;
 import payment.methods.CreditCardPayment;
+import payment.methods.PayPalPayment;
 import payment.methods.GoPayPayment;
 import payment.services.DatabaseRepository;
 import payment.services.MockEmailNotifier;

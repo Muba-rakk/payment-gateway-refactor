@@ -11,6 +11,6 @@ public class PayPalPayment implements PaymentMethod {
 
     @Override
     public void pay(double amount) {
-        System.out.println("Memproses PayPal... dengan email " + email + " sebesar Rp" + amount);
+        System.out.println(String.format("Memproses PayPal... dengan email %s sebesar Rp%.2f", email, amount));
     }
 }
