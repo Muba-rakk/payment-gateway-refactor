@@ -3,13 +3,14 @@ package payment.methods;
 import payment.interfaces.PaymentMethod;
 
 public class BitcoinPayment implements PaymentMethod {
-    // TODO: Tambahkan atribut private untuk walletAddress
+    private String walletAddress;
 
-    // TODO: Buat constructor
+    public BitcoinPayment(String walletAddress) {
+        this.walletAddress = walletAddress;
+    }
 
     @Override
     public void pay(double amount) {
-        // TODO: Implementasikan logika Bitcoin
-        System.out.println("[TODO] Bitcoin Payment belum diimplementasikan.");
+        System.out.println(String.format("Memproses Bitcoin... dengan wallet %s sebesar Rp%.2f", walletAddress, amount));
     }
 }

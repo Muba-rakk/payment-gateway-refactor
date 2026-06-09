@@ -3,13 +3,14 @@ package payment.methods;
 import payment.interfaces.PaymentMethod;
 
 public class GoPayPayment implements PaymentMethod {
-    // TODO: Tambahkan atribut private untuk phoneNumber
+    private String phoneNumber;
 
-    // TODO: Buat constructor
+    public GoPayPayment(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     @Override
     public void pay(double amount) {
-        // TODO: Implementasikan logika GoPay
-        System.out.println("[TODO] GoPay Payment belum diimplementasikan.");
+        System.out.println(String.format("Memproses GoPay... dengan nomor %s sebesar Rp%.2f", phoneNumber, amount));
     }
 }
