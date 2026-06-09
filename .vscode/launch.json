@@ -6,8 +6,7 @@
       "name": "Main",
       "request": "launch",
       "mainClass": "Main",
-      "projectName": "payment-gateway-refactor",
-      "envFile": "${workspaceFolder}/.env.local"
+      "projectName": "payment-gateway-refactor_2313a830"
     }
   ]
 }
