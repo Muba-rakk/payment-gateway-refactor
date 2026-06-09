@@ -10,6 +10,6 @@ public class MockEmailNotifier implements PaymentNotifier {
     @Override
     public void sendNotification(double amount, String recipient) {
         // TODO: Print simulasi pesan pengiriman email
-        System.out.println("[TODO] sendNotification belum diimplementasikan.");
+        System.out.println("[EMAIL NOTIFICATION] Mengirim email: " + message);
     }
 }

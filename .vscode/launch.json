@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "name": "Run Payment Gateway",
+            "request": "launch",
+            "env": {
+                "DB_URL": "jdbc:mysql://localhost:3306/payment_gateway_db",
+                "DB_USER": "root",
+                "DB_PASSWORD": "masukkan_password_anda_di_sini"
+            }
+        }
+    ]
+}
