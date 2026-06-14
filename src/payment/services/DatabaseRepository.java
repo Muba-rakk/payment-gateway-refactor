@@ -8,31 +8,43 @@ import java.sql.SQLException;
 
 public class DatabaseRepository implements PaymentRepository {
     
-    // Encapsulation: Menggunakan access modifier private
     private String dbUrl;
     private String user;
     private String password;
+    private boolean isConnected;
 
-    // Dependency Injection melalui konstruktor
     public DatabaseRepository(String dbUrl, String user, String password) {
         this.dbUrl = dbUrl;
         this.user = user;
         this.password = password;
+        this.isConnected = testConnection();
         
-        // Memastikan tabel tersedia saat repository diinisialisasi
-        initializeDatabase();
+        if (isConnected) {
+            initializeDatabase();
+        } else {
+            System.out.println("[DB INFO] Mode fallback aktif. Transaksi akan disimpan in-memory saja.");
+        }
     }
 
-    // Method private untuk auto-migrate tabel
+    private boolean testConnection() {
+        try {
+            Connection conn = DriverManager.getConnection(dbUrl, user, password);
+            boolean valid = conn.isValid(5);
+            conn.close();
+            return valid;
+        } catch (SQLException e) {
+            System.out.println("[DB WARNING] Tidak dapat terhubung ke MySQL: " + e.getMessage());
+            return false;
+        }
+    }
+
     private void initializeDatabase() {
-        // Menyesuaikan dengan tabel 'transactions' dari kerangka Anda
         String createTableQuery = "CREATE TABLE IF NOT EXISTS transactions ("
                 + "id INT AUTO_INCREMENT PRIMARY KEY, "
                 + "amount DOUBLE NOT NULL, "
                 + "method VARCHAR(50) NOT NULL, "
                 + "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
 
-        // Menggunakan try-with-resources untuk mencegah kebocoran memori [cite: 79]
         try (Connection conn = DriverManager.getConnection(dbUrl, user, password);
              PreparedStatement pstmt = conn.prepareStatement(createTableQuery)) {
 
@@ -41,14 +53,19 @@ public class DatabaseRepository implements PaymentRepository {
 
         } catch (SQLException e) {
             System.err.println("[DB ERROR] Gagal membuat tabel: " + e.getMessage());
+            isConnected = false;
         }
     }
 
     @Override
     public void saveTransaction(double amount, String methodType) {
+        if (!isConnected) {
+            System.out.println("[DB FALLBACK] Transaksi disimpan in-memory (DB tidak tersedia).");
+            return;
+        }
+
         String query = "INSERT INTO transactions (amount, method) VALUES (?, ?)";
 
-        // Menggunakan try-with-resources untuk mencegah kebocoran memori [cite: 79]
         try (Connection conn = DriverManager.getConnection(dbUrl, user, password);
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
