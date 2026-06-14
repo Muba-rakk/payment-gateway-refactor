@@ -1,12 +1,11 @@
 import payment.PaymentProcessor;
-import payment.interfaces.PaymentMethod;
 import payment.interfaces.PaymentNotifier;
 import payment.interfaces.PaymentRepository;
-import payment.methods.CreditCardPayment;
-import payment.methods.PayPalPayment;
-import payment.methods.GoPayPayment;
+import payment.interfaces.TransactionStore;
 import payment.services.DatabaseRepository;
+import payment.services.InMemoryTransactionStore;
 import payment.services.MockEmailNotifier;
+import payment.ui.PaymentMenu;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,9 +13,10 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
-    
+
     // Helper method untuk membaca file .env secara manual
     private static Map<String, String> loadEnvFile(String filePath) {
         Map<String, String> envMap = new HashMap<>();
@@ -36,7 +36,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        System.out.println("=== Payment Gateway Refactored ===");
+        System.out.println("\n" +
+        "╔═══════════════════════════════════════╗\n" +
+        "║     PAYMENT GATEWAY REFACTORED        ║\n" +
+        "║   Sistem Pembayaran Modern & Dinamis  ║\n" +
+        "╚═══════════════════════════════════════╝");
 
         // Load kredensial dari file .env.local sebagai fallback
         Map<String, String> localEnv = loadEnvFile(".env.local");
@@ -57,22 +61,17 @@ public class Main {
         // Buat instance dari layer Data/Services (Low-level module)
         PaymentRepository repo = new DatabaseRepository(dbUrl, dbUser, dbPass);
         PaymentNotifier notifier = new MockEmailNotifier(smtp);
+        TransactionStore store = new InMemoryTransactionStore();
 
         // Injeksi dependencies (DIP) ke PaymentProcessor (High-level module)
-        PaymentProcessor processor = new PaymentProcessor(repo, notifier);
+        PaymentProcessor processor = new PaymentProcessor(repo, notifier, store);
 
-        System.out.println("\n--- Transaksi 1 (Legacy): Credit Card ---");
-        PaymentMethod cc = new CreditCardPayment("1234-5678-9012-3456", "123", "12/28");
-        processor.processPayment(cc, 150000, "customer1@example.com");
+        // Mode Interaktif - Menu dinamis
+        Scanner scanner = new Scanner(System.in);
+        PaymentMenu menu = new PaymentMenu(processor, store, scanner);
+        menu.start();
 
-        System.out.println("\n--- Transaksi 2 (Legacy): PayPal ---");
-        PaymentMethod paypal = new PayPalPayment("user@paypal.com");
-        processor.processPayment(paypal, 250000, "user@paypal.com");
-
-        System.out.println("\n--- Transaksi 3 (Fitur Baru): GoPay ---");
-        PaymentMethod gopay = new GoPayPayment("081234567890");
-        processor.processPayment(gopay, 50000, "user@gopay.com");
-        
-        System.out.println("\n=== Semua Transaksi Selesai ===");
+        scanner.close();
+        System.out.println("\n=== Program Selesai ===");
     }
 }
